@@ -36,36 +36,36 @@
     
 .text 0x3000
 main:
-    li $v0, 33		# System call code 33 for MIDI out synchronous
-    li $a2, 0		# type of instrument (0 is Acoustic Grand Piano)
-    li $a3, 127		# volume (127 is max)
+    li $v0, 33		        # System call code 33 for MIDI out synchronous
+    li $a2, 0		        # type of instrument (0 is Acoustic Grand Piano)
+    li $a3, 127		        # volume (127 is max)
     
-    la $t0, notes		# initialize address of notes
-    li $t1, 0		# noteCounter = 0;
+    la $t0, notes		    # initialize address of notes
+    li $t1, 0		        # noteCounter = 0;
     la $t2, diffDurCount	# initialize address of diffDurCount
-    la $t3, diffDur		# initialize address of diffDur
-    lw $t9, 0($t2)		# load diffDurCount[&]
+    la $t3, diffDur		    # initialize address of diffDur
+    lw $t9, 0($t2)		    # load diffDurCount[&]
     
-while:			# while (notes[&] != -1) {
-    lw $a0, 0($t0)		# load notes[&]
+while:			            # while (notes[&] != -1) {
+    lw $a0, 0($t0)		    # load notes[&]
     beq $a0, -1, endWhile
     
     bne $t1, $t9, else		# if( noteCounter == diffDurCount[&]) {
-    lw $a1, 0($t3)		# sets to special duration
+    lw $a1, 0($t3)		    # sets to special duration
     addi $t3, $t3, 4		# &notes[&] ++
     addi $t2, $t2, 4		# &diffDurCount[&] ++    
-    lw $t9, 0($t2)		# load diffDurCount[&]
-    j endif			# }
-else:			# else {
+    lw $t9, 0($t2)		    # load diffDurCount[&]
+    j endif			        # }
+else:			            # else {
     lw $a1, duration		# sets to quarter note duration
-endif:			# }
+endif:			            # }
     
     syscall
     
     addi $t1, $t1, 1		# noteCounter ++;
     addi $t0, $t0, 4		# &notes[&] ++
-    j while			# }
+    j while			        # }
 endWhile:
 
-    li $v0, 10		# System call code 10 for exit
-    syscall			# exit the program
+    li $v0, 10		        # System call code 10 for exit
+    syscall			        # exit the program
